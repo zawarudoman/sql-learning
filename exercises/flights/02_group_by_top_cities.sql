@@ -14,4 +14,9 @@
    ===================================================================== */
 
 
+SELECT COUNT(t.flight_id) as flight_count, a.city
+FROM timetable t
+         JOIN bookings.airports a ON t.departure_airport = a.airport_code
+GROUP BY a.city
+ORDER BY flight_count DESC LIMIT 10
 
