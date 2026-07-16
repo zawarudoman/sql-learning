@@ -15,3 +15,9 @@
 
 -- твоё решение:
 
+SELECT COUNT(s.seat_no) as seat_count, ap.model
+FROM airplanes ap
+         JOIN seats s ON s.airplane_code = ap.airplane_code
+GROUP BY ap.model
+HAVING COUNT(s.seat_no) > 100
+ORDER BY seat_count DESC;
