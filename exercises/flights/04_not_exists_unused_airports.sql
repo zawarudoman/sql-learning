@@ -13,5 +13,9 @@
    (Помнишь ловушку с "нет ни одной строки > 100"? Тот же случай.)
    ===================================================================== */
 
--- твоё решение:
 
+SELECT ap.airport_code, ap.city, ap.country
+FROM airports ap
+WHERE NOT EXISTS (SELECT 1
+                  FROM timetable t
+                  WHERE t.departure_airport = ap.airport_code);
