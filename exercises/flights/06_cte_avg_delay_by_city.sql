@@ -33,11 +33,11 @@ ORDER BY delay_min DESC;
 WITH delay as (SELECT t.departure_airport                                                   as airport,
                       EXTRACT(EPOCH FROM (t.actual_departure - t.scheduled_departure)) / 60 as delay_min,
                       t.flight_id                                                           as flight
-               FROM timetable t)
+               FROM timetable t
+               WHERE t.actual_departure IS NOT NULL)
 SELECT a.city, AVG(d.delay_min) as avg_delay_min, COUNT(d.flight) as count_flight
 FROM delay d
          JOIN airports a ON a.airport_code = d.airport
-where d.delay_min IS NOT NULL
 GROUP BY a.city
 HAVING COUNT(flight) > 100
 ORDER BY avg_delay_min DESC;
