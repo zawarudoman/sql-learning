@@ -22,5 +22,15 @@
    отбери топ-10. Так будет читаемо.
    ===================================================================== */
 
--- твоё решение:
+WITH delays AS (SELECT (t.actual_departure - t.scheduled_departure) AS delay,
+                       t.flight_id                                  as flight_id,
+                       t.route_no,
+                       t.actual_departure,
+                       t.scheduled_departure
+                FROM timetable t
+                where t.actual_departure IS NOT NULL)
+SELECT *
+FROM delays
+ORDER BY delay DESC
+LIMIT 10
 
