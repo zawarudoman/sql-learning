@@ -13,5 +13,13 @@
      ORDER BY     = "в каком ПОРЯДКЕ нумеровать"
    ===================================================================== */
 
--- твоё решение:
+SELECT t.route_no,
+       t.flight_id,
+       t.scheduled_departure,
+       row_number() over (PARTITION BY route_no ORDER BY scheduled_departure) as rn
+FROM timetable t
+order by t.route_no,rn
+LIMIT 500
+
+
 
