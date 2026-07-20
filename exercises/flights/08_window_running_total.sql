@@ -16,5 +16,9 @@
    Это тот самый приём "история остатка", только про рейсы.
    ===================================================================== */
 
--- твоё решение:
-
+WITH count_date AS (SELECT t.scheduled_departure::DATE as date_dep, COUNT(t.flight_id) as count_fl
+                    FROM timetable t
+                    GROUP BY t.scheduled_departure::DATE)
+SELECT c.date_dep, c.count_fl, SUM(c.count_fl) OVER (ORDER BY c.date_dep) AS running_total
+FROM count_date c
+ORDER BY c.date_dep;
