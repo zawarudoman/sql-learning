@@ -18,5 +18,11 @@
    У самого первого рейса маршрута предыдущего нет → там будет пусто (NULL).
    ===================================================================== */
 
--- твоё решение:
-
+SELECT t.route_no,
+       t.flight_id,
+       t.scheduled_departure,
+       lag(t.scheduled_departure) OVER (PARTITION BY route_no ORDER BY t.scheduled_departure) as prev_departure,
+       t.scheduled_departure - lag(t.scheduled_departure) OVER (PARTITION BY route_no ORDER BY t.scheduled_departure) as diff
+FROM timetable t
+ORDER BY t.route_no
+LIMIT 50
