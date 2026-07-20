@@ -18,5 +18,14 @@
    Это самый частый оконный приём в реальной работе — освой намертво.
    ===================================================================== */
 
--- твоё решение:
+
+WITH result_table as (SELECT t.route_no,
+                             t.flight_id,
+                             t.scheduled_departure,
+                             t.status,
+                             row_number() OVER (PARTITION BY t.route_no ORDER BY t.scheduled_departure) as rn
+                      FROM timetable t)
+SELECT rt.route_no, rt.flight_id, rt.scheduled_departure::DATE, rt.status
+FROM result_table rt
+where rt.rn = 1;
 
