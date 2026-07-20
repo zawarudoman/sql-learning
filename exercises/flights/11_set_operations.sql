@@ -21,5 +21,8 @@
    Бонус (по желанию): переделай через NOT EXISTS и сравни планы (EXPLAIN).
    ===================================================================== */
 
--- твоё решение:
-
+SELECT a.city
+FROM timetable t JOIN airports a ON a.airport_code = t.departure_airport
+EXCEPT
+SELECT a.city
+FROM timetable t JOIN airports a ON a.airport_code = t.arrival_airport;
