@@ -19,5 +19,11 @@
    Классы: 'Economy', 'Comfort', 'Business'.
    ===================================================================== */
 
--- твоё решение:
-
+SELECT ap.model as airplane,
+       COUNT(CASE WHEN s.fare_conditions ='Economy' THEN 1 END) as Economy_seat,
+       COUNT(CASE WHEN s.fare_conditions ='Comfort' THEN 1 END) as Comfort_seat,
+       COUNT(CASE WHEN s.fare_conditions ='Business' THEN 1 END)as Business_seat,
+       COUNT(*) AS total_seats
+FROM airplanes ap
+         JOIN seats s ON s.airplane_code = ap.airplane_code
+GROUP BY ap.model
