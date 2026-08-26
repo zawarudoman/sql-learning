@@ -23,18 +23,20 @@
    (один flight → один route → один airplane?), или где-то один-ко-многим.
    ===================================================================== */
 
-SELECT a.model,  SUM(s.price)
-FROM segments s
-         JOIN bookings.flights f on s.flight_id = f.flight_id
-         JOIN bookings.routes r on f.route_no = r.route_no
-         JOIN bookings.airplanes a on r.airplane_code = a.airplane_code
+WITH flight_plane AS (
+    SELECT f.flight_id,
+           r.airplane_code
+    FROM bookings.flights f
+        JOIN bookings.routes r
+            ON  r.route_no = f.route_no
+            AND f.scheduled_departure::date <@ r.validity
+            AND EXTRACT(isodow FROM f.scheduled_departure)::int = ANY (r.days_of_week)
+)
+SELECT a.model,
+       SUM(s.price) AS revenue,
+       COUNT(*)     AS segments_cnt
+FROM bookings.segments s
+    JOIN flight_plane       fp ON fp.flight_id     = s.flight_id
+    JOIN bookings.airplanes a  ON a.airplane_code  = fp.airplane_code
 GROUP BY a.model
-
-
-
-select * from segments
-
-SELECT *
--- проверка на фан-аут (общая выручка должна совпасть с суммой отчёта):
--- SELECT SUM(price) FROM bookings.segments;
-
+ORDER BY revenue DESC;
